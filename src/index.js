@@ -6,6 +6,10 @@ import * as serviceWorker from './serviceWorker';
 import { ThemeProvider } from '@rmwc/theme';
 import { BrowserRouter as Router } from 'react-router-dom';
 
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 ReactDOM.render(
 	<React.StrictMode>
 		<ThemeProvider

@@ -15,7 +15,7 @@ import '@rmwc/dialog/styles';
 
 const { dialogs, alert } = createDialogQueue();
 
-const FireAlert = () => alert({ title: '', body: 'Please choose a valid option to add question' });
+const FireAlert = (body) => alert({ title: '', body: body });
 
 function BuildQuestions(props) {
 	const [questionId, setQuestionId] = useState();
@@ -25,11 +25,12 @@ function BuildQuestions(props) {
 	const [selectOption, setSelectedOption] = useState();
 
 	async function optionsForQuestion(id) {
-		if (!!id) {
+		if (!!id && id !== 0) {
 			let temp = await getOptions(id);
 			setOptions(temp.data.data.items);
 		} else {
 			setOptions();
+			setSelectedOption();
 		}
 	}
 
@@ -66,6 +67,7 @@ function BuildQuestions(props) {
 					})
 				}
 				onChange={(evt) => {
+					setSelectedOption();
 					optionsForQuestion(evt.target.value);
 					setQuestionId(evt.target.value);
 				}}
@@ -93,7 +95,7 @@ function BuildQuestions(props) {
 						label="Add Question"
 						onClick={(e) => {
 							if (!!!selectOption) {
-								FireAlert();
+								FireAlert('Please choose a valid option to add question');
 							} else {
 								addQuestions(parseInt(questionId), selectOption);
 							}
@@ -102,7 +104,17 @@ function BuildQuestions(props) {
 				)}
 			</FormField>
 			<div style={{ display: 'flex', margin: '0.5rem auto', width: '115%', alignItems: 'center' }}>
-				<FormField style={{ margin: '0.2rem auto' }}>{!!quizQuestions && quizQuestions.length === 2 && <Button raised label="Submit" />}</FormField>
+				<FormField style={{ margin: '0.2rem auto' }}>
+					{!!quizQuestions && quizQuestions.length === 2 && (
+						<Button
+							raised
+							label="Submit"
+							onClick={(e) => {
+								console.log(e);
+							}}
+						/>
+					)}
+				</FormField>
 			</div>
 			<DialogQueue dialogs={dialogs} />
 		</div>
